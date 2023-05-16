@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <style>
+        *{
+            box-sizing: border-box;
+        }
+        body{
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .game{
+            width: 600px;
+            height: 600px;
+            display: flex;
+            flex-wrap: wrap;
+            margin: 30px 0;
+            outline: 4px solid white;
+            outline-offset: -2px;
+        }
+        .field{
+            width: 120px;
+            height: 120px;
+            border: 2px solid black;
+            cursor: pointer;
+
+        }
+
+        .txt{
+            text-align: center;
+            font-weight: bold;
+            font-size: 40px;
+            font-family: Arial;
+            text-align: center;
+
+        }
+        .res{
+            color: red;
+            font-weight: bold;
+            font-size: 40px;
+            font-family: Arial;
+            height: 50px;
+        }
+    </style>
+
+</head>
+<body>
+
+    <div class="res"></div>
+    <div class="game">
+        <div class="field"></div>
+        <div class="field"></div>
+        <div class="field"></div>
+        <div class="field"></div>
+        <div class="field"></div>
+
+        <div class="field"></div>
+        <div class="field"></div>
+        <div class="field"></div>
+        <div class="field"></div>
+        <div class="field"></div>
+
+        <div class="field"></div>
+        <div class="field"></div>
+        <div class="field"></div>
+        <div class="field"></div>
+        <div class="field"></div>
+
+        <div class="field"></div>
+        <div class="field"></div>
+        <div class="field"></div>
+        <div class="field"></div>
+        <div class="field"></div>
+
+
+        <div class="field"></div>
+        <div class="field"></div>
+        <div class="field"></div>
+        <div class="field"></div>
+        <div class="field"></div>
+    </div>
+    <script>
+        let game = document.querySelector(".game"),
+            res = document.querySelector(".res"),
+            btnGame = document.querySelector('.new-game')
+            fields = document.querySelectorAll(".field");
+        const width = 5,
+            height = 5,
+            colors = ["blue", "green", "red", "darkblue", "darkred", "aqua", "black", "grey"];
+
+        function gen_field() {
+for (let i = 0; i < 10; i++){
+            let index = getRandomInt(fields.length);
+            fields[index].innerHTML = "<p class='txt' style='color: red'>*</p>";
+            fields[index].id = "mine";
+        }
+
+        for (let i = 0; i < fields.length; i++){
+            if(fields[i].innerHTML == "")
+            {
+                let mines = 0;
+                for (let x = 0; x < 8; x++)
+                {
+                    let index;
+                    switch (x) {
+                        case 0:
+                            index = (i - width) - 1;
+                            break;
+                        case 1:
+                            index = i - width;
+                            break;
+                        case 2:
+                            index = i - (width - 1);
+                            break;
+                        case 3:
+                            index = i - 1;
+                            break;
+                        case 4:
+                            index = i + 1;
+                            break;
+                        case 5:
+                            index = i + (width - 1);
+                            break;
+                        case 6:
+                            index = i + width;
+                            break;
+                        case 7:
+                            index = i + width + 1;
+                            break;
+                    }
+                    if(index >= 0 && index < fields.length) {
+                        if (fields[index].id == "mine") {
+                            mines += 1;
+                        }
+                    }
+
+
+                }
+                if(mines > 0) {
+                    fields[i].innerHTML = "<p class='txt' style='color: " + colors[mines - 1] + " '>" + mines.toString() + "</p>";
+                }
+            }
+        }
+        }
+
+
+
+        function getRandomInt(max) {
+            return Math.floor(Math.random() * max);
+        }
+
+        function click(e){
+            game.removeEventListener('click', click);
+            e.target.id = "mine";
+            e.target.innerHTML = "<p class='txt' style='color: red'>*</p>";
+            gen_field();
+
+            res.textContent = "Вы проиграли"
+        }
+
+        game.addEventListener('click', click);
+    </script>
+</body>
+</html>
